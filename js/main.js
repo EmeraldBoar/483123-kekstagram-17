@@ -93,6 +93,7 @@ PHOTO_ARRAY = createDiscriptionPhoto(NUM_PHOTO);
 // Работа с шаблоном
 var template = document.querySelector('#picture').content.querySelector('.picture');
 var fragment = document.createDocumentFragment();
+var pictures = document.querySelector('.pictures');
 
 
 for (var i = 0; i < PHOTO_ARRAY.length; i = i + 1) {
@@ -105,8 +106,5 @@ for (var i = 0; i < PHOTO_ARRAY.length; i = i + 1) {
   pictureLikes.textContent = PHOTO_ARRAY[i].likes;
   fragment.appendChild(similarPhoto);
 }
-
-
-var pictures = document.querySelector('.pictures');
 
 pictures.appendChild(fragment);
