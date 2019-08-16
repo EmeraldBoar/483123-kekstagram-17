@@ -1,7 +1,6 @@
 'use strict';
 
 var NUM_PHOTO = 25;
-var PHOTO_ARRAY = null;
 var COMMENTS_ARRAY = ['Всё отлично!', 'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
@@ -35,6 +34,8 @@ var AUTHOR_LIST = [
   },
 ];
 
+var photoArray = [];
+
 
 // Функция создает массив от 1 до num и перемешивает его в случайном порядке
 var getShuffleArr = function (num) {
@@ -63,11 +64,12 @@ function getRandomNum(min, max) {
 // Функция создания массива с объектами где объекты являются комментариями к фотографии
 var createCommentsArray = function () {
   var comments = [];
+  var randomComment = COMMENTS_ARRAY[getRandomNum(0, COMMENTS_ARRAY.length - 1)];
   for (var i = 1; i <= getRandomNum(1, MAX_NUM_COMMENTS); i = i + 1) {
     var randomAuthor = getRandomNum(0, AUTHOR_LIST.length - 1);
     comments[i - 1] = {
       avatar: AUTHOR_LIST[randomAuthor].img,
-      message: COMMENTS_ARRAY[getRandomNum(0, COMMENTS_ARRAY.length - 1)] + ' ' + COMMENTS_ARRAY[getRandomNum(0, COMMENTS_ARRAY.length - 1)],
+      message: randomComment + ' ' + randomComment,
       name: AUTHOR_LIST[randomAuthor].name
     };
   }
@@ -88,23 +90,16 @@ var createDiscriptionPhoto = function (num) {
   return array;
 };
 
-PHOTO_ARRAY = createDiscriptionPhoto(NUM_PHOTO);
+photoArray = createDiscriptionPhoto(NUM_PHOTO);
 
 // Работа с шаблоном
 var template = document.querySelector('#picture').content.querySelector('.picture');
-var fragment = document.createDocumentFragment();
 var pictures = document.querySelector('.pictures');
 
-
-for (var i = 0; i < PHOTO_ARRAY.length; i = i + 1) {
+for (var i = 0; i < photoArray.length; i = i + 1) {
   var similarPhoto = template.cloneNode(true);
-  var pictureImage = similarPhoto.querySelector('.picture__img');
-  var pictureComments = similarPhoto.querySelector('.picture__comments');
-  var pictureLikes = similarPhoto.querySelector('.picture__likes');
-  pictureImage.src = PHOTO_ARRAY[i].url;
-  pictureComments.textContent = PHOTO_ARRAY[i].comments.length;
-  pictureLikes.textContent = PHOTO_ARRAY[i].likes;
-  fragment.appendChild(similarPhoto);
+  similarPhoto.querySelector('.picture__img').src = photoArray[i].url;
+  similarPhoto.querySelector('.picture__comments').textContent = photoArray[i].comments.length;
+  similarPhoto.querySelector('.picture__likes').textContent = photoArray[i].likes;
+  pictures.appendChild(similarPhoto);
 }
-
-pictures.appendChild(fragment);
