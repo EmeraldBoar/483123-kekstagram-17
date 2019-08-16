@@ -1,7 +1,7 @@
 'use strict';
 
 var NUM_PHOTO = 25;
-var PHOTO_ARRAY = [];
+var PHOTO_ARRAY = null;
 var COMMENTS_ARRAY = ['Всё отлично!', 'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
@@ -45,7 +45,7 @@ var getShuffleArr = function (num) {
   var count = array.length;
   var j = null;
   var temp = null;
-  while (count = count - 1) {
+  while (count--) {
     j = Math.floor(Math.random() * count);
     temp = array[count];
     array[count] = array[j];
@@ -69,21 +69,44 @@ var createCommentsArray = function () {
       avatar: AUTHOR_LIST[randomAuthor].img,
       message: COMMENTS_ARRAY[getRandomNum(0, COMMENTS_ARRAY.length - 1)] + ' ' + COMMENTS_ARRAY[getRandomNum(0, COMMENTS_ARRAY.length - 1)],
       name: AUTHOR_LIST[randomAuthor].name
-    }
+    };
   }
   return comments;
 };
 
-// Функция создания массива объектов где num - количество объектов, а array - массив куда объекты записываются
-var createDiscriptionPhoto = function (num, array) {
+// Функция создает и возвращает массив объектов где num - количество объектов в массиве.
+var createDiscriptionPhoto = function (num) {
+  var shuffleArray = getShuffleArr(NUM_PHOTO);
+  var array = [];
   for (var i = 0; i < num; i = i + 1) {
     array[i] = {
-      url: 'photos/' + getShuffleArr(NUM_PHOTO)[i] + '.jpg',
+      url: 'photos/' + shuffleArray[i] + '.jpg',
       likes: getRandomNum(15, 200),
       comments: createCommentsArray()
-    }
+    };
   }
+  return array;
 };
 
-createDiscriptionPhoto(NUM_PHOTO, PHOTO_ARRAY);
-console.log(PHOTO_ARRAY);
+PHOTO_ARRAY = createDiscriptionPhoto(NUM_PHOTO);
+
+// Работа с шаблоном
+var template = document.querySelector('#picture').content.querySelector('.picture');
+var fragment = document.createDocumentFragment();
+
+
+for (var i = 0; i < PHOTO_ARRAY.length; i = i + 1) {
+  var similarPhoto = template.cloneNode(true);
+  var pictureImage = similarPhoto.querySelector('.picture__img');
+  var pictureComments = similarPhoto.querySelector('.picture__comments');
+  var pictureLikes = similarPhoto.querySelector('.picture__likes');
+  pictureImage.src = PHOTO_ARRAY[i].url;
+  pictureComments.textContent = PHOTO_ARRAY[i].comments.length;
+  pictureLikes.textContent = PHOTO_ARRAY[i].likes;
+  fragment.appendChild(similarPhoto);
+}
+
+
+var pictures = document.querySelector('.pictures');
+
+pictures.appendChild(fragment);
