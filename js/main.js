@@ -34,6 +34,7 @@ var AUTHOR_LIST = [
   },
 ];
 
+var ESC_CODE = 27;
 var photoArray = [];
 
 
@@ -103,3 +104,38 @@ for (var i = 0; i < photoArray.length; i = i + 1) {
   similarPhoto.querySelector('.picture__likes').textContent = photoArray[i].likes;
   pictures.appendChild(similarPhoto);
 }
+
+// Работа с PopUp
+
+var uploadFile = document.querySelector('#upload-file');
+var imageUploadPopup = document.querySelector('.img-upload__overlay');
+var closePopupButton = imageUploadPopup.querySelector('.img-upload__cancel');
+
+
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_CODE) {
+    closePopup();
+  }
+};
+
+
+var openPopup = function () {
+  imageUploadPopup.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+var closePopup = function () {
+  imageUploadPopup.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+var onCloseButtonClick = function () {
+  closePopup();
+};
+
+var onUploadFileChange = function () {
+  openPopup();
+};
+
+uploadFile.addEventListener('change', onUploadFileChange);
+closePopupButton.addEventListener('click', onCloseButtonClick);
