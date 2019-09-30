@@ -6,7 +6,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === window.util.SUCCESS_CODE) {
         success(xhr.response);
       } else {
         error('Статус: ' + xhr.status);

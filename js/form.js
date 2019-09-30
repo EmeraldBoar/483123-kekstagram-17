@@ -22,14 +22,14 @@
 
   // Начальное состояние чекнутого при открытии попапа
   var getInitialStateEffects = function () {
-    for (var j = 0; j < effectRadioButtons.length; j++) {
-      if (effectRadioButtons[j].checked) {
-        imagePreviewWrapper.classList.add('effects__preview--' + effectRadioButtons[j].value);
+    effectRadioButtons.forEach(function (it) {
+      if (it.checked) {
+        imagePreviewWrapper.classList.add('effects__preview--' + it.value);
       }
-      if (effectRadioButtons[j].checked && effectRadioButtons[j].value === 'none') {
+      if (it.checked && it.value === 'none') {
         effectSlider.classList.add('hidden');
       }
-    }
+    });
   };
 
   // Уменьшение маштаба изображения
@@ -130,11 +130,10 @@
   };
 
   // Цикл для навешивания слушателя событий на каждый элемент коллекции effectRadioButtons
-  for (var k = 0; k < effectRadioButtons.length; k++) {
-    effectRadioButtons[k].addEventListener('click', onEffectButtonClick);
-  }
+  effectRadioButtons.forEach(function (it) {
+    it.addEventListener('click', onEffectButtonClick);
+  });
 
-  // Работа с перетаскиванием и изменением насыщенности эффектов
 
   // Функция высчитывает насыщенность эффектов
   var getChangeSaturationEffect = function () {
