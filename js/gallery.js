@@ -19,6 +19,7 @@
     pictures.appendChild(similarPhoto);
   };
 
+
   // Генерирует данные на основе ID - элемента
   var getChangeFilteredData = function (data) {
     imageFilterButtons.forEach(function (button) {
@@ -53,6 +54,7 @@
     });
   };
 
+
   // Переключение активного элемента фильтров
   var activeСlassSwitching = function (evt) {
     imageFilterButtons.forEach(function (button) {
@@ -70,24 +72,23 @@
     });
   };
 
-  var lastTimeout;
+
+  // Обработчик клика по фильтрам
+  var onChangeFilterData = function (evt) {
+    activeСlassSwitching(evt);
+    window.debounce(function () {
+      cleansDataPhoto();
+      getChangeFilteredData(window.photoData);
+    });
+  };
+
 
   var onSuccess = function (data) {
+    window.photoData = data;
     imageFilters.classList.remove('img-filters--inactive');
-    getChangeFilteredData(data);
+    getChangeFilteredData(window.photoData);
     imageFilterButtons.forEach(function (button) {
-      button.addEventListener('click', function (evt) {
-        if (!evt.target.classList.contains('img-filters__button--active')) {
-          activeСlassSwitching(evt);
-          if (lastTimeout) {
-            window.clearTimeout(lastTimeout);
-          }
-          lastTimeout = window.setTimeout(function () {
-            cleansDataPhoto();
-            getChangeFilteredData(data);
-          }, 500);
-        }
-      });
+      button.addEventListener('click', onChangeFilterData);
     });
   };
 
@@ -105,5 +106,4 @@
   };
 
   window.load('GET', PHOTO_URL, onSuccess, onError);
-
 })();
